@@ -2,6 +2,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import PlaceholderImage from '#assets/images/background-image.png';
 import Button from '#playground/components/Button';
@@ -18,6 +19,7 @@ export default function App() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [pickedEmoji, setPickedEmoji] = useState(null);
 
+  // #region HANDLERS
   async function pickImageAsync() {
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
@@ -51,9 +53,10 @@ export default function App() {
   async function onSaveImageAsync() {
     // we will implement this later
   }
+  // #endregion
 
   return (
-    <View style={styles.container}>
+    <GestureHandlerRootView style={styles.container}>
       <StatusBar style="auto" />
 
       <View style={styles.imageContainer}>
@@ -79,7 +82,7 @@ export default function App() {
       <EmojiPicker isVisible={isModalVisible} onClose={onModalClose}>
         <EmojiList onSelect={setPickedEmoji} onCloseModal={onModalClose} />
       </EmojiPicker>
-    </View>
+    </GestureHandlerRootView>
   );
 }
 
