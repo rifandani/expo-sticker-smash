@@ -1,8 +1,10 @@
 import * as ImagePicker from 'expo-image-picker';
+import * as MediaLibrary from 'expo-media-library';
 import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { captureRef } from 'react-native-view-shot';
 
 import PlaceholderImage from '#assets/images/background-image.png';
 import Button from '#playground/components/Button';
@@ -18,6 +20,12 @@ export default function App() {
   const [showAppOptions, setShowAppOptions] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [pickedEmoji, setPickedEmoji] = useState(null);
+  const [status, requestPermission] = MediaLibrary.usePermissions();
+  const imageRef = useRef<View>(null);
+
+  if (status === null) {
+    requestPermission();
+  }
 
   // #region HANDLERS
   async function pickImageAsync() {
@@ -51,7 +59,19 @@ export default function App() {
   }
 
   async function onSaveImageAsync() {
-    // we will implement this later
+    try {
+      const localUri = await captureRef(imageRef, {
+        height: 440,
+        quality: 1,
+      });
+
+      await MediaLibrary.saveToLibraryAsync(localUri);
+      if (localUri) {
+        alert('Saved!');
+      }
+    } catch (err) {
+      console.log('onSaveImageAsync', err);
+    }
   }
   // #endregion
 
@@ -60,8 +80,12 @@ export default function App() {
       <StatusBar style="auto" />
 
       <View style={styles.imageContainer}>
-        <ImageViewer placeholder={PlaceholderImage} selectedImage={selectedImage} />
-        {pickedEmoji !== null ? <EmojiSticker imageSize={40} stickerSource={pickedEmoji} /> : null}
+        <View ref={imageRef} collapsable={false}>
+          <ImageViewer placeholder={PlaceholderImage} selectedImage={selectedImage} />
+          {pickedEmoji !== null ? (
+            <EmojiSticker imageSize={40} stickerSource={pickedEmoji} />
+          ) : null}
+        </View>
       </View>
 
       {showAppOptions ? (
