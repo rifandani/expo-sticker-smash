@@ -3,21 +3,12 @@
   "compilerOptions": {
     "strict": true,
     "baseUrl": ".",
+    // path aliases for web only supported when we use `@expo/metro-config` instead of `@expo/webpack-config`
     "paths": {
-      "#assets/*": [
-        "assets/*"
-      ],
-      "#auth/*": [
-        "src/modules/auth/*"
-      ],
-      "#playground/*": [
-        "src/modules/playground/*"
-      ]
+      "#assets/*": ["assets/*"],
+      "#auth/*": ["src/modules/auth/*"],
+      "#playground/*": ["src/modules/playground/*"]
     }
   },
-  "include": [
-    "**/*.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-  ]
+  "include": ["**/*.d.ts", "**/*.ts", "**/*.tsx"]
 }
