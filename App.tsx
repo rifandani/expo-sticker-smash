@@ -96,7 +96,7 @@ export default function App() {
 
   return (
     <GestureHandlerRootView style={styles.container}>
-      <StatusBar style="auto" />
+      <StatusBar style="light" />
 
       <View style={styles.imageContainer}>
         <View ref={imageRef} collapsable={false}>
